@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.gabrielwatanabe.customerconnect.dto.CreateCustomer;
+import tech.gabrielwatanabe.customerconnect.dto.UpdateCustomer;
 import tech.gabrielwatanabe.customerconnect.model.Customer;
 import tech.gabrielwatanabe.customerconnect.service.CustomerService;
 
@@ -30,10 +31,27 @@ public class CustomerController {
 
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Customer> getCustomerPorId(@PathVariable(value = "id") Long id){
+        return ResponseEntity.ok().body(this.customerService.buscarCustomerPorId(id));
+    }
+
     @PostMapping
     public ResponseEntity<Void> criaCustomer(@RequestBody CreateCustomer createCustomer){
         var customer = this.customerService.criaCustomer(createCustomer);
         return ResponseEntity.created(URI.create("/customer/" + customer.getId())).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> updateCustomer(@PathVariable(value = "id") Long id, @RequestBody UpdateCustomer updateCustomer){
+        this.customerService.atualizaCustomer(id, updateCustomer);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> updateCustomer(@PathVariable(value = "id") Long id){
+        this.customerService.deleteCustomer(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

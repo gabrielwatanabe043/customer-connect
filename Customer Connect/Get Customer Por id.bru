@@ -1,19 +1,13 @@
 meta {
-  name: Get Customer
+  name: Get Customer Por id
   type: http
-  seq: 3
+  seq: 4
 }
 
 get {
-  url: http://localhost:8080/customer?order=desc
+  url: http://localhost:8080/customer/3
   body: none
   auth: none
-}
-
-params:query {
-  order: desc
-  ~email: gabrielpereira569@hotmail.com
-  ~cpf: 09511697935
 }
 
 body:json {

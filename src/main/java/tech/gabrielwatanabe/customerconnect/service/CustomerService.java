@@ -6,6 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tech.gabrielwatanabe.customerconnect.dto.CreateCustomer;
+import tech.gabrielwatanabe.customerconnect.dto.UpdateCustomer;
+import tech.gabrielwatanabe.customerconnect.exceptions.NotFoundException;
 import tech.gabrielwatanabe.customerconnect.model.Customer;
 import tech.gabrielwatanabe.customerconnect.repository.CustomerRepository;
 
@@ -45,6 +47,42 @@ public class CustomerService {
     }
 
     public Customer criaCustomer(CreateCustomer createCustomer){
-      return  this.customerRepository.save(new Customer(createCustomer));
+      return this.customerRepository.save(new Customer(createCustomer));
+    }
+
+    public Customer buscarCustomerPorId(Long id){
+        return this.customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer não encontrado"));
+    }
+
+
+    public void atualizaCustomer(Long id, UpdateCustomer updateCustomer){
+            Customer customer = this.customerRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Customer não encontrado"));
+
+            if(StringUtils.hasText(updateCustomer.nome())){
+                customer.setNome(updateCustomer.nome());
+            }
+
+            if(StringUtils.hasText(updateCustomer.cpf())){
+            customer.setCpf(updateCustomer.cpf());
+            }
+
+            if(StringUtils.hasText(updateCustomer.celular())){
+            customer.setCelular(updateCustomer.celular());
+            }
+
+            if(StringUtils.hasText(updateCustomer.email())){
+            customer.setEmail(updateCustomer.email());
+            }
+
+            this.customerRepository.save(customer);
+    }
+
+
+    public void deleteCustomer(Long id){
+        Customer customer = this.customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer não encontrado"));
+        this.customerRepository.deleteById(customer.getId());
     }
 }
