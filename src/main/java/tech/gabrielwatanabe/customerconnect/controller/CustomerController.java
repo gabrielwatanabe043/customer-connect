@@ -23,8 +23,10 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<Page<Customer>> getCustomerPageable(@RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
                                                               @RequestParam(value = "pageSize", defaultValue = "10",required = false)Integer pageSize,
-                                                              @RequestParam(value = "order", defaultValue = "desc", required = false)String order){
-        return ResponseEntity.ok().body(this.customerService.getCustomers(page, pageSize, order));
+                                                              @RequestParam(value = "order", defaultValue = "desc", required = false)String order,
+                                                              @RequestParam(value = "cpf", required = false)String cpf,
+                                                              @RequestParam(value = "email",required = false)String email){
+        return ResponseEntity.ok().body(this.customerService.getCustomers(page, pageSize, order, cpf, email));
 
     }
 

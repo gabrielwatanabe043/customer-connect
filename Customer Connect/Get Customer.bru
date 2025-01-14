@@ -5,13 +5,15 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/customer?order=desc
+  url: http://localhost:8080/customer?order=desc&email=gabrielpereira569@hotmail.com
   body: none
   auth: none
 }
 
 params:query {
   order: desc
+  email: gabrielpereira569@hotmail.com
+  ~cpf: 09511697935
 }
 
 body:json {

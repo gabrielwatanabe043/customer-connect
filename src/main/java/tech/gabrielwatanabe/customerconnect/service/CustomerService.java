@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import tech.gabrielwatanabe.customerconnect.dto.CreateCustomer;
 import tech.gabrielwatanabe.customerconnect.model.Customer;
 import tech.gabrielwatanabe.customerconnect.repository.CustomerRepository;
@@ -19,13 +20,27 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Page<Customer> getCustomers(Integer page, Integer pageSize, String order){
+    public Page<Customer> getCustomers(Integer page, Integer pageSize, String order, String cpf, String email){
         var direction = Sort.Direction.DESC;
 
         if(order.equalsIgnoreCase("asc")){
             direction = Sort.Direction.ASC;
         }
+
         PageRequest pageable = PageRequest.of(page, pageSize, direction, "data_criacao");
+
+        if(StringUtils.hasText(cpf) && StringUtils.hasText(email)){
+            return this.customerRepository.getCustomerCpfAndEmail(cpf, email, pageable);
+        }
+
+        if(StringUtils.hasText(cpf)){
+            return this.customerRepository.getCustomerCpf(cpf, pageable);
+        }
+
+        if(StringUtils.hasText(email)){
+            return this.customerRepository.getCustomerEmail(email, pageable);
+        }
+
         return this.customerRepository.getCustomerPageable(pageable);
     }
 
